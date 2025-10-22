@@ -1,161 +1,100 @@
-<!-- markdownlint-configure-file {
-  "MD013": {
-    "code_blocks": false,
-    "tables": false,
-    "line_length":200
-  },
-  "MD033": false,
-  "MD041": false
-} -->
 
-[license]: /LICENSE
-[license-badge]: https://img.shields.io/github/license/jerrykuku/luci-theme-argon?style=flat-square&a=1
-[prs]: https://github.com/jerrykuku/luci-theme-argon/pulls
-[prs-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
-[issues]: https://github.com/jerrykuku/luci-theme-argon/issues/new
-[issues-badge]: https://img.shields.io/badge/Issues-welcome-brightgreen.svg?style=flat-square
-[release]: https://github.com/jerrykuku/luci-theme-argon/releases
-[release-badge]: https://img.shields.io/github/v/release/jerrykuku/luci-theme-argon?style=flat-square
-[download]: https://github.com/jerrykuku/luci-theme-argon/releases
-[download-badge]: https://img.shields.io/github/downloads/jerrykuku/luci-theme-argon/total?style=flat-square
-[contact]: https://t.me/jerryk6
-[contact-badge]: https://img.shields.io/badge/Contact-telegram-blue?style=flat-square
-[en-us-link]: /README.md
-[zh-cn-link]: /README_ZH.md
-[en-us-release-log]: /RELEASE.md
-[zh-cn-release-log]: /RELEASE_ZH.md
-[config-link]: https://github.com/jerrykuku/luci-app-argon-config/releases
-[lede]: https://github.com/coolsnowwolf/lede
-[official]: https://github.com/openwrt/openwrt
-[immortalwrt]: https://github.com/immortalwrt/immortalwrt
+<!--
+  README versi Bahasa Indonesia - mod dari jerrykuku/luci-theme-argon v2.4.4
+  - Diterjemahkan dan dikembangkan agar mudah dibaca.
+  - Tidak terlalu formal, tapi informatif.
+-->
 
 <div align="center">
-<img src="https://raw.githubusercontent.com/jerrykuku/staff/master/argon_title4.svg">
+  <img src="https://raw.githubusercontent.com/jerrykuku/staff/master/argon_title4.svg" alt="Argon theme logo">
 
-# A brand new OpenWrt LuCI theme
+  # Argon (MOD) — Tema LuCI untuk OpenWrt
 
-Argon is **a clean and tidy OpenWrt LuCI theme** that allows<br/>
-users to customize their login interface with images or videos.  
-It also supports automatic and manual switching between light and dark modes.
-
-[![license][license-badge]][license]
-[![prs][prs-badge]][prs]
-[![issues][issues-badge]][issues]
-[![release][release-badge]][release]
-[![download][download-badge]][download]
-[![contact][contact-badge]][contact]
-
-**English** |
-[简体中文][zh-cn-link]
-
-[Key Features](#key-features) •
-[Branch](#branch-introduction) •
-[Version History](#version-history) •
-[Getting started](#getting-started) •
-[Screenshots](#screenshots) •
-[Contributors](#contributors) •
-[Credits](#credits)
-
-<img src="https://raw.githubusercontent.com/jerrykuku/staff/master/argon2.gif">
 </div>
 
-## Key Features
+Argon adalah tema LuCI yang bersih dan rapi untuk OpenWrt. Tema ini
+membuat tampilan antarmuka web router jadi lebih modern, dan mendukung
+kustomisasi halaman login dengan gambar atau video. Argon juga memudahkan
+peralihan antara mode terang dan gelap, baik otomatis maupun manual.
 
-- Clean Layout.
-- Adapted to mobile display.
-- Customizable theme colors.
-- Support for using Bing images as login background.
-- Support for custom uploading of images or videos as login background.
-- Automatically switch between light and dark modes with the system, and can also be set to a fixed mode.
-- Settings plugin with extensions [luci-app-argon-config][config-link]
+> [!NOTE]  
+> Ini adalah versi mod dari repository original [jerrykuku/luci-theme-argon](https://github.com/jerrykuku/luci-theme-argon.git)
+(v2.4.4).
 
-> **Upcoming Version **
->
-> "The current theme uses Less for CSS construction, and the method for switching between light and dark modes is relatively primitive. Meanwhile, the official theme has already switched to the UT template. I am exploring a way to build the theme template using modern front-end development tools, initially settling on a solution using Vite + UnoCSS. This approach will utilize a proxy server for debugging and also support HMR (Hot Module Replacement), significantly improving development speed. Currently, the basic development framework has been set up, but due to a busy schedule, I still need some time to migrate the existing styles. Stay tuned!"
+## Fitur utama
 
-## Branch Introduction
+- Tampilan bersih dan modern untuk LuCI
+- Dukungan wallpaper gambar/video di halaman login
+- Mode terang/gelap (auto/manual)
+- Paket IPK siap pakai untuk pemasangan cepat
+- Integrasi dengan `luci-app-argon-config` (opsional) untuk pengaturan lewat GUI
 
-There are currently two main branches that are adapted to different versions of the **OpenWrt** source code.  
-The table below will provide a detailed introduction:
+## Fitur tambahan pada mod ini
 
-| Branch | Version | Description                        | Matching source                                           |
-| ------ | ------- | ---------------------------------- | --------------------------------------------------------- |
-| master | v2.x.x  | Support the latest version of LuCI | [Official OpenWrt][official] • [ImmortalWrt][immortalwrt] |
-| 18.06 (deprecated) | v1.x.x  | Support the 18.06 version of LuCI   | [Lean's LEDE][lede]                                         |
+- Penambahan tombol navigasi cepat di atas halaman LuCI untuk akses mudah ke halaman favorit.
+- Implementasi Bottom Navigation Bar di bagian bawah halaman LuCI untuk navigasi yang lebih nyaman pada perangkat mobile.
+- Custom CSS tambahan untuk memperbaiki tampilan elemen tertentu di LuCI.
+- Peningkatan tampilan responsif agar lebih baik di berbagai ukuran layar.
+- Dan lain-lain.
 
-## Version History
+## Persiapan & Instalasi cepat
 
-The latest version is v2.4.3 [Click here][en-us-release-log] to view the full version history record.
-
-## Getting started
-
-### Build for Lean's LEDE project (deprecated)
+Contoh perintah untuk mengunduh dan memasang tema (LuCI 24.10):
 
 ```bash
-cd lede/package/lean
-rm -rf luci-theme-argon
-git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git luci-theme-argon
-make menuconfig #choose LUCI->Theme->Luci-theme-argon
-make -j1 V=s
-```
-
-### Build for OpenWrt official SnapShots and ImmortalWrt
-
-```bash
-cd openwrt/package
-git clone https://github.com/jerrykuku/luci-theme-argon.git
-make menuconfig #choose LUCI->Theme->Luci-theme-argon
-make -j1 V=s
-```
-
-### Install for LuCI 18.06 ( Lean's LEDE )
-
-```bash
-wget --no-check-certificate https://github.com/jerrykuku/luci-theme-argon/releases/download/v1.8.2/luci-theme-argon_1.8.2-20230609_all.ipk
+wget --no-check-certificate https://github.com/alrescha79-cmd/luci-theme-argon-mod/releases/download/v2.4.4/luci-theme-argon_2.4.4-r20251022_all.ipk
 opkg install luci-theme-argon*.ipk
 ```
 
-### Install for OpenWrt official SnapShots and ImmortalWrt
-
-```bash
-opkg install luci-compat
-opkg install luci-lib-ipkg
-wget --no-check-certificate https://github.com/jerrykuku/luci-theme-argon/releases/download/v2.3.2/luci-theme-argon_2.3.2-r20250207_all.ipk
-opkg install luci-theme-argon*.ipk
-```
-
-### Install luci-app-argon-config
+Jika ingin memasang UI konfigurasi (opsional):
 
 ```bash
 wget --no-check-certificate -O luci-app-argon-config_0.9_all.ipk https://github.com/jerrykuku/luci-app-argon-config/releases/download/v0.9/luci-app-argon-config_0.9_all.ipk
 opkg install luci-app-argon-config*.ipk
 ```
 
-## Notice
+Catatan singkat:
 
-- Chrome browser is highly recommended. There are some new css3 features used in this theme, currently only Chrome has the best compatibility.
-- Microsoft has officially retired Internet Explorer, RIP IE🙏<del>Currently, the mainline version of the IE series has bugs that need to be addressed.</del>
-- FireFox does not enable the backdrop-filter by default, [see here](https://developer.mozilla.org/zh-CN/docs/Web/CSS/backdrop-filter) for the opening method.
+- Gunakan perintah di atas pada perangkat OpenWrt yang punya akses ke internet.
+- Link IPK tema diarahkan ke rilis di repository mod (`alrescha79-cmd`).
 
-## Screenshots
+## Screenshot
 
-![desktop](/Screenshots/screenshot_pc.jpg)
-![mobile](/Screenshots/screenshot_phone.jpg)
+![Screenshot Argon Theme](Screenshots/dark.png)
+![Screenshot Argon Theme](Screenshots/light.png)
 
-## Contributors
+## Kustomisasi wallpaper
 
-<a href="https://github.com/jerrykuku/luci-theme-argon/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=jerrykuku/luci-theme-argon&v=2" />
-</a>
+File wallpaper ditempatkan di folder tema:
 
-Made with [contrib.rocks](https://contrib.rocks).
+- Gambar / video: `htdocs/luci-static/argon/background/`
 
-## Related Projects
+Untuk otomatisasi wallpaper, skrip peladen terkait ada di:
 
-- [luci-app-argon-config](https://github.com/jerrykuku/luci-app-argon-config): Argon theme config plugin
-- [openwrt-package](https://github.com/jerrykuku/openwrt-package): My OpenWrt package
-- [CasaOS](https://github.com/IceWhaleTech/CasaOS): A simple, easy-to-use, elegant open-source Personal Cloud system (My current main project)
+- `root/usr/libexec/rpcd/luci.argon_wallpaper` (lihat isi repositori untuk detail)
 
-## Credits
+Jika menggunakan `luci-app-argon-config`, Anda bisa mengubah wallpaper
+dan opsi lainnya lewat antarmuka LuCI.
 
-[luci-theme-material](https://github.com/LuttyYang/luci-theme-material/)
+## Kontribusi & Sumber
+
+Repositori asli: https://github.com/jerrykuku/luci-theme-argon (versi dasar v2.4.4)
+
+Repositori mod ini: https://github.com/alrescha79-cmd/luci-theme-argon-mod
+
+Kalau mau kontribusi, buka issue atau PR di repositori mod/asal sesuai
+lokasi perubahan yang diinginkan.
+
+## Lisensi
+
+Lisensi mengikuti berkas `LICENSE` yang ada di repositori ini. Lihat file
+`LICENSE` untuk detail izin penggunaan dan distribusi.
+
+## Terima kasih
+
+Terima kasih kepada [jerrykuku](https://github.com/jerrykuku) atas kerja keras pada tema Argon asli — mod
+ini cuma penyesuaian kecil. Kalau ada yang
+ingin dikembangkan lagi (fitur, perbaikan tampilan, atau dukungan perangkat),
+beri tahu lewat issue di GitHub.
+
+--
