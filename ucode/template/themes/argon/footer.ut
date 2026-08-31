@@ -1,57 +1,83 @@
 {#
-	Argon is a clean HTML5 theme for LuCI. It is based on luci-theme-material Argon Template
-
-	luci-theme-argon
-	Copyright 2020 Jerrykuku <jerrykuku@qq.com>
-
-	Have a bug? Please create an issue here on GitHub!
-	https://github.com/jerrykuku/luci-theme-argon/issues
-
-	luci-theme-material:
-	Copyright 2015 Lutty Yang <lutty@wcan.in>
-
-	Agron Theme
-	https://demos.creative-tim.com/argon-dashboard/index.html
-
-	Licensed to the public under the Apache License 2.0
+ Copyright 2022 Jo-Philipp Wich <jo@mein.io>
+ Licensed to the public under the Apache License 2.0.
 -#}
 
-		</div>
-		<footer class="mobile-hide" style="text-wrap: auto">
-			<div class="footer-content" style="display: flex; flex-wrap: wrap; gap: 0.5em; justify-content: end;">
-				<a class="luci-link" href="https://github.com/openwrt/luci" target="_blank">Powered by {{ version.luciname }} ({{ version.luciversion }})</a>
+{% const rollback = dispatcher.rollback_pending() %}
+{% if (rollback || trigger_apply || trigger_revert): %}
+	<script>
+		document.addEventListener("luci-loaded", function() {
+			{% if (trigger_apply): %}
+				L.ui.changes.apply(true);
+			{% elif (trigger_revert): %}
+				L.ui.changes.revert();
+			{% else %}
+				L.ui.changes.confirm(true, Date.now() + {{rollback.remaining * 1000}}, {{sprintf('%J', rollback.token)}});
+			{% endif %}
+		});
+	</script>
+{% endif %}
 
-				<span class="footer-separator">|</span>
+{% if (media_error): %}
+	<script>
+		L.require('ui').then(function(ui) {
+			ui.showIndicator('media_error', _('Theme fallback'), function(ev) {
+				ui.showModal(_('Error loading theme'), [
+					E('p', [
+						_('A fallback is used since the configured theme failed to load with the error below.')
+					]),
+					E('hr'),
+					E('div', { 'style': 'white-space:pre-line' }, {{ sprintf('%J', trim(media_error)) }}),
+					E('div', { 'class': 'right' }, [
+						E('button', { 'class': 'btn cbi-button', 'click': ui.hideModal }, _('Dismiss'))
+					])
+				]);
+			});
+		});
+	</script>
+{% endif %}
 
-				<a href="https://github.com/jerrykuku/luci-theme-argon" target="_blank">ArgonTheme {# vPKG_VERSION #}</a>
+{%
+	// Logic Ucode untuk membaca data hardware langsung dari file sistem Linux
+	let fs = require("fs");
 
-				<span class="footer-separator">|</span>
+	// Membaca suhu CPU
+	let temp_raw = fs.readfile("/sys/class/thermal/thermal_zone0/temp");
+	let temp_str = "N/A";
+	if (temp_raw) {
+		let temp_val = int(trim(temp_raw));
+		temp_str = sprintf("%.1f &deg;C", temp_val / 1000.0);
+	}
 
-				<a class="luci-link" href="{{ version.disturl }}" target="_blank">{{ version.distname }} {{ version.distversion }}-{{ version.distrevision }}</a>
-
-				<ul class="breadcrumb pull-right" id="modemenu" style="display:none"></ul>
-			</div>
-		</footer>
-	</div>
-</div>
-<script>
-	// thanks for Jo-Philipp Wich <jow@openwrt.org>
-	var luciLocation = {{ ctx.path }};
-	var winHeight = window.innerHeight;
-	window.addEventListener('resize', function () {
-		var winWidth = window.innerWidth;
-		if(winWidth < 600){
-			var newHeight = window.innerHeight;
-			var keyboradHeight = newHeight - winHeight;
-			var ftcElement = document.querySelector(".ftc");
-			if (ftcElement) {
-				ftcElement.style.bottom = (keyboradHeight + 30) + "px";
-			}
+	// Membaca CPU Usage (melalui Load Average)
+	let load_raw = fs.readfile("/proc/loadavg");
+	let load_str = "N/A";
+	if (load_raw) {
+		let load_arr = split(trim(load_raw), " ");
+		if (length(load_arr) >= 3) {
+			load_str = sprintf("%s, %s, %s (1m, 5m, 15m)", load_arr[0], load_arr[1], load_arr[2]);
 		}
-	});
-</script>
-<script type="text/javascript">L.require('menu-argon')</script>
-<div id="tempcpu"></div>
-<div id="cpuusage"></div>
-</body>
-</html>
+	}
+%}
+
+<!-- 
+Bungkus div dengan display:none agar tidak mengacaukan layout bawah (footer),
+karena DOM Element ini nantinya akan "dipindahkan" ke dalam tabel oleh file JS Anda 
+-->
+<div style="display:none;">
+	<div id="tempcpu">{{ temp_str }}</div>
+	<div id="cpuusage">{{ load_str }}</div>
+</div>
+
+{%
+    // Membaca raw suhu di server-side agar tidak diblokir keamanan LuCI
+    let fs = require("fs");
+    let temp_raw = fs.readfile("/sys/class/thermal/thermal_zone0/temp");
+%}
+<div id="server_temp_raw" style="display:none;">{{ trim(temp_raw) }}</div>
+
+{% include(`themes/${theme}/footer`) %}
+
+<!-- Lua compatibility mode active: {{ lua_active ? 'yes' : 'no' }} -->
+
+<!-- Lua compatibility mode active: {{ lua_active ? 'yes' : 'no' }} -->
